@@ -1,0 +1,290 @@
+# Note: An invalid OpenAPI 3 yaml file will cause the following exception at startup:
+# io.vertx.ext.web.api.contract.RouterFactoryException: Wrong specification url/path: webroot/openapi.yaml
+
+openapi: 3.0.2
+
+info:
+  version: "0.0.1"
+  title: BODE-PKI-Authorization-Primary
+
+paths:
+  /allowMap:
+    get:
+      description: Get allow map
+      summary: Get allow map
+      operationId: getAllowMap
+      tags:
+        - AllowMap
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+    post:
+      description: Add a certificate to allow map
+      summary: Add a certificate to allow map
+      operationId: addCertificateToAllowMap
+      tags:
+        - AllowMap
+      requestBody:
+        description: Certificate
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/NewCertificate'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+    delete:
+      description: Remove a certificate from allow map
+      summary: Remove a certificate from allow map
+      operationId: removeCertificateFromAllowMap
+      parameters:
+        - in: query
+          name: uuid
+          description: The uuid
+          required: true
+          schema:
+            type: string
+      tags:
+        - AllowMap
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /nonce:
+    get:
+      description: Get a Nonce
+      summary: Get nonce
+      operationId: getNonce
+      parameters:
+        - in: query
+          name: endpoint
+          description: The endpoint
+          required: true
+          schema:
+            type: string
+      tags:
+        - Onboarding
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /checkNonce:
+    get:
+      description: Check nonce
+      summary: Check nonce
+      operationId: checkNonce
+      parameters:
+        - in: query
+          name: nonce
+          description: The nonce
+          required: true
+          schema:
+            type: string
+      tags:
+        - Onboarding
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /revoke:
+    get:
+      description: Revoke Certificate
+      summary: Revoke Certificate
+      operationId: revokeCertificate
+      parameters:
+        - in: query
+          name: uuid
+          description: The uuid
+          required: true
+          schema:
+            type: string
+      tags:
+        - Certificates
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /certificates:
+    get:
+      description: Get certificates
+      summary: Get certificates
+      operationId: getCertificates
+      tags:
+        - Certificates
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /signedRootHash:
+    get:
+      description: Get signed root hash
+      summary: Get signed root hash
+      operationId: getSignedRootHash
+      tags:
+        - AuthorizationDatabase
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /authorizationDatabase:
+    get:
+      description: Get authorization database
+      summary: Get authorization database
+      operationId: getAuthorizationDatabase
+      tags:
+        - AuthorizationDatabase
+      responses:
+        '200':
+          $ref: '#/components/schemas/AuthorizationDatabase'
+
+components:
+
+  schemas:
+
+    NewCertificate:
+      description: Certificate
+      type: object
+      required:
+        - key
+        - host
+        - nodePort
+        - asPort
+      properties:
+        key:
+          type: string
+          description: The key
+        host:
+          type: string
+          description: The host
+        nodePort:
+          type: integer
+          description: The node port
+        asPort:
+          type: integer
+          description: The authorization system port
+
+    Certificate:
+      description: Certificate
+      type: object
+      required:
+        - uuid
+        - key
+        - host
+        - nodePort
+        - asPort
+        - revoked
+      properties:
+        uuid:
+          type: string
+          description: The uuid
+        key:
+          type: string
+          description: The key
+        host:
+          type: string
+          description: The host
+        nodePort:
+          type: integer
+          description: The node port
+        asPort:
+          type: integer
+          description: The authorization system port
+        revoked:
+          type: boolean
+          description: The revocation status
+
+    Block:
+      description: Certificate Block
+      type: object
+      required:
+        - hash
+        - prevHash
+        - certificate
+      properties:
+        hash:
+          type: string
+          description: The hash
+        prevHash:
+          type: string
+          description: The prevHash
+        certificate:
+          $ref: '#/components/schemas/Certificate'
+
+    AuthorizationDatabase:
+      description: Authorization Database
+      type: object
+      required:
+        - chain
+        - signature
+      properties:
+        chain:
+          type: object
+          required:
+            - rootHash
+            - blocks
+          properties:
+            rootHash:
+              type: string
+              description: The root hash
+            blocks:
+              type: array
+              description: The certificate blocks
+              items:
+                $ref: '#/components/schemas/Block'
+        signature:
+          type: string
+
+  responses:
+
+    Success:
+      description: Success response
+      content:
+        'application/json':
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        'application/json':
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+
+    NotFound:
+      description: Not found
+      content:
+        'application/json':
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        'application/json':
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string

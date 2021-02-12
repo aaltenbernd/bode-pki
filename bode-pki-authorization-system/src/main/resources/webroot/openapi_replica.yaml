@@ -1,0 +1,261 @@
+# Note: An invalid OpenAPI 3 yaml file will cause the following exception at startup:
+# io.vertx.ext.web.api.contract.RouterFactoryException: Wrong specification url/path: webroot/openapi.yaml
+
+openapi: 3.0.2
+
+info:
+  version: "0.0.1"
+  title: BODE-PKI-Authorization-Replica
+
+paths:
+  /triggerOnboarding:
+    get:
+      description: Trigger onboarding
+      summary: Trigger onboarding
+      operationId: triggerOnboarding
+      tags:
+        - Onboarding
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /proof:
+    get:
+      description: Get proof
+      summary: Get proof
+      operationId: getProof
+      tags:
+        - Onboarding
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /certificates:
+    get:
+      description: Get certificates
+      summary: Get certificates
+      operationId: getCertificates
+      tags:
+        - Certificates
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /signedRootHash:
+    get:
+      description: Get signed root hash
+      summary: Get signed root hash
+      operationId: getSignedRootHash
+      tags:
+        - AuthorizationDatabase
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /authorizationDatabase:
+    get:
+      description: Get authorization database
+      summary: Get authorization database
+      operationId: getAuthorizationDatabase
+      tags:
+        - AuthorizationDatabase
+      responses:
+        '200':
+          $ref: '#/components/schemas/AuthorizationDatabase'
+    put:
+      description: Update authorization database
+      summary: Update authorization database
+      operationId: updateAuthorizationDatabase
+      tags:
+        - AuthorizationDatabase
+      requestBody:
+        description: authorization database Update
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/AuthorizationDatabase'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /sync:
+    get:
+      description: Get synced information
+      summary: Get synced information
+      operationId: isSynced
+      tags:
+        - Sync
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+    put:
+      description: Exchange sync information
+      summary: Exchange sync information
+      operationId: checkSynced
+      tags:
+        - Sync
+      requestBody:
+        description: Signed Root Hash
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/SignedRootHash'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+
+  schemas:
+
+    Certificate:
+      description: Certificate
+      type: object
+      required:
+        - uuid
+        - key
+        - host
+        - nodePort
+        - asPort
+        - revoked
+      properties:
+        uuid:
+          type: string
+          description: The uuid
+        key:
+          type: string
+          description: The key
+        host:
+          type: string
+          description: The host
+        nodePort:
+          type: integer
+          description: The node port
+        asPort:
+          type: integer
+          description: The authorization system port
+        revoked:
+          type: boolean
+          description: The revocation status
+
+    Block:
+      description: Certificate Block
+      type: object
+      required:
+        - hash
+        - prevHash
+        - certificate
+      properties:
+        hash:
+          type: string
+          description: The hash
+        prevHash:
+          type: string
+          description: The prevHash
+        certificate:
+          $ref: '#/components/schemas/Certificate'
+
+    AuthorizationDatabase:
+      description: Authorization Database
+      type: object
+      required:
+        - chain
+        - signature
+      properties:
+        chain:
+          type: object
+          required:
+            - rootHash
+            - blocks
+          properties:
+            rootHash:
+              type: string
+              description: The root hash
+            blocks:
+              type: array
+              description: The certificate blocks
+              items:
+                $ref: '#/components/schemas/Block'
+        signature:
+          type: string
+
+    SignedRootHash:
+      description: Signed Root Hash
+      type: object
+      required:
+        - rootHash
+        - signature
+        - endpoint
+      properties:
+        rootHash:
+          type: string
+          description: The root hash
+        signature:
+          type: string
+          description: The signature
+        endpoint:
+          type: string
+          description: The endpoint
+
+  responses:
+    Success:
+      description: Success response
+      content:
+        'application/json':
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+
+    BadRequest:
+      description: Validation error / Bad request
+      content:
+        'application/json':
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+
+    NotFound:
+      description: Not found
+      content:
+        'application/json':
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        'application/json':
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string

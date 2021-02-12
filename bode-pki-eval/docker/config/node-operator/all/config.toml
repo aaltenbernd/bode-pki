@@ -1,0 +1,31 @@
+logging="INFO"
+data-path="/opt/besu/data"
+host-whitelist=["*"]
+
+genesis-file="/opt/besu/config/genesis.json"
+node-private-key-file="/opt/besu/keys/key"
+min-gas-price=0
+
+# rpc
+rpc-http-enabled=true
+rpc-http-host="0.0.0.0"
+rpc-http-port=8545
+rpc-http-cors-origins=["*"]
+rpc-http-api=["ADMIN","PERM","ETH","NET","IBFT","TXPOOL"]
+
+# ws
+rpc-ws-enabled=true
+rpc-ws-host="0.0.0.0"
+rpc-ws-port=8546
+rpc-ws-api=["ADMIN","PERM","ETH","NET","IBFT","TXPOOL"]
+
+# permissions
+permissions-nodes-config-file-enabled=true
+permissions-accounts-config-file-enabled=true
+
+# dns
+# Xdns-enabled=true
+# Xdns-update-enabled=true
+
+# txpool
+tx-pool-retention-hours=1

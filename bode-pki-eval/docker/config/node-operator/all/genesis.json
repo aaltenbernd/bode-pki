@@ -1,0 +1,20 @@
+{
+  "config": {
+    "chainId": 2020,
+    "muirglacierblock": 0,
+    "contractSizeLimit": 2147483647,
+    "ibft2": {
+      "blockperiodseconds": 30,
+      "epochlength": 30000,
+      "requesttimeoutseconds": 60
+    }
+  },
+  "nonce": "0x0",
+  "timestamp": "0x58ee40ba",
+  "gasLimit": "0x1fffffffffffff",
+  "difficulty": "0x1",
+  "mixHash": "0x63746963616c2062797a616e74696e65206661756c7420746f6c6572616e6365",
+  "coinbase": "0x0000000000000000000000000000000000000000",
+  "alloc" : {},
+  "extraData" : "0xf83ea00000000000000000000000000000000000000000000000000000000000000000d5948a305c91e701942e3069cb6364a73f3d88aab5f1808400000000c0"
+}

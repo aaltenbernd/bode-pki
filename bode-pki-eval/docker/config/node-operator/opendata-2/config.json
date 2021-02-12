@@ -1,0 +1,24 @@
+{
+  "PORT": 8080,
+  "CLI_PORT": 8081,
+  "PRIMARY": {
+    "certificate": {
+      "key": "5c911c14a9c997c7d6cf1a87a765042a697386e0f9688227243d206a17a8c46079546c0e2d5d88d554fa58277cb0817c086f0d506b10d1d2938854aaf586e4d5",
+      "host": "na.org",
+      "asPort": 8080
+    }
+  },
+  "REPLICA": {
+    "certificate":{
+      "key": "e81b6e219a53e3a4b5ebe4166ef39e76d42d9a3a6bfd93709101ff33b4501f1dab8442ff2dcb0f177c5ce1aa1f62c41ae78938e84185a2fe18929b951c82f2a2",
+      "host": "opendata.2.org",
+      "asPort": 8080,
+      "nodePort": 30303
+    },
+    "private_key":"560c7dbeafec4f1e937d8c112c58c74d93ab47df51f34ba0d058fb70161b3ab6",
+    "connector": {
+      "port":8546
+    },
+    "sync_period": 1000
+  }
+}
