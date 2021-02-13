@@ -44,7 +44,7 @@ In the following prerequisites are listed that are necessary to build the protot
 * python 3.9.0
 * pip 20.3.1
 
-In addition, the following Python libraries are mandatory to run the tests: web3, numpy, grequests, matplotlib, pathlib. The following command installs the required libraries:\\
+In addition, the following Python libraries are mandatory to run the tests: web3, numpy, grequests, matplotlib, pathlib. The following command installs the required libraries:
 
 ```
 $ pip install web3 numpy grequests matplotlib pathlib
