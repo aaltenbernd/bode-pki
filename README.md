@@ -64,7 +64,12 @@ The following folder structure is present in the source code:
 
 * bode-pki
   * bode-pki-authorization-system
+    * conf
+    * src   
   * bode-pki-eval
+    * docker
+    * eval
+    * results
 
 ### Build
 
@@ -102,7 +107,7 @@ $ cd ../../
 
 ### Run
 
-The tests are written Python and Python 3 is mandatory. If your Python 3 executable is reachable by `python3` please replace it in the following commands accordingly. The main script is using reset.py which is located under the same folder. The reset script is used to restore all docker container to their initial state between tests. If your docker is running as root under Unix you may have to run these tests as sudo. 
+The tests are written Python and Python 3 is mandatory. If your Python 3 executable is reachable by `python3` please replace it in the following commands accordingly. The main script is using a reset script. Both the main script and the reset script are located unter the `eval` folder. The reset script is used to restore all docker container to their initial state between tests. If your docker is running as root under Unix you may have to run these tests as sudo. 
 
 Run all tests by:
 
